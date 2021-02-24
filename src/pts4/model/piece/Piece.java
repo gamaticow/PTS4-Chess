@@ -3,7 +3,7 @@ package pts4.model.piece;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import pts4.model.ChessBoard;
+import pts4.view.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class Piece {
 
     @Getter @NonNull private final ChessBoard board;
-    @Getter @NonNull private final Color color;
+    @Getter @NonNull private final ChessColor color;
     @Getter @NonNull private Coordinate coordinate;
 
     /**

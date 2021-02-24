@@ -1,6 +1,6 @@
 package pts4.model.piece;
 
-import pts4.model.ChessBoard;
+import pts4.view.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class King extends Piece {
 
-    public King(ChessBoard board, Color color, Coordinate coordinate) {
+    public King(ChessBoard board, ChessColor color, Coordinate coordinate) {
         super(board, color, coordinate);
     }
 
