@@ -12,7 +12,7 @@ import java.util.List;
 public class Queen extends Piece {
 
     public Queen(ChessBoard board, ChessColor color, Coordinate coordinate) {
-        super(board, color, coordinate);
+        super(board, color, coordinate, 'q');
     }
 
     @Override

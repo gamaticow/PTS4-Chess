@@ -1,23 +1,38 @@
 package pts4.model.piece;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import pts4.view.ChessBoard;
 import pts4.model.Coordinate;
 
+import java.io.File;
 import java.util.List;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:41
  */
 
-@RequiredArgsConstructor
 public abstract class Piece {
 
-    @Getter @NonNull private final ChessBoard board;
-    @Getter @NonNull private final ChessColor color;
-    @Getter @NonNull private Coordinate coordinate;
+    @Getter private final ChessBoard board;
+    @Getter private final ChessColor color;
+    @Getter private Coordinate coordinate;
+    @Getter private final ImageView image;
+
+    public Piece(ChessBoard board, ChessColor color, Coordinate coordinate, char piece){
+        this.board = board;
+        this.color = color;
+        this.coordinate = coordinate;
+
+        String name = String.valueOf(color.getPrefix()) + piece + ".png";
+        //System.out.println(name);
+        File image = new File(Piece.class.getClassLoader().getResource(name).getFile());
+        this.image = new ImageView(image.toURI().toString());
+    }
 
     /**
      * Liste de tous les coups possible sans prendre en compte les autres pièces du plateau

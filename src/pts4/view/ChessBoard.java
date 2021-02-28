@@ -4,9 +4,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import lombok.Getter;
-import lombok.Setter;
-import pts4.model.piece.ChessColor;
-import pts4.model.piece.King;
+import pts4.model.Coordinate;
+import pts4.model.piece.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:44
@@ -14,34 +16,23 @@ import pts4.model.piece.King;
 
 public class ChessBoard extends Pane {
 
-    @Getter @Setter private King whiteKing, blackKing;
+    @Getter private King whiteKing, blackKing;
+    @Getter private final List<Piece> pieces;
 
     private final Rectangle background;
-    private final Square[][] squares;
+    private final Board board;
 
     public ChessBoard() {
+        this.pieces = new ArrayList<>();
+        fill();
+
         background = new Rectangle();
         background.setFill(Color.WHITE);
 
         getChildren().add(background);
 
-        squares = new Square[8][8];
-
-        for(int x = 0; x < 8; x++) {
-            ChessColor color = ChessColor.BLACK;
-            if(x % 2 == 0)
-                color = ChessColor.WHITE;
-            for(int y = 0; y < 8; y++) {
-                squares[x][y] = new Square(color);
-                if (color == ChessColor.BLACK)
-                    color = ChessColor.WHITE;
-                else
-                    color = ChessColor.BLACK;
-
-                getChildren().add(squares[x][y]);
-            }
-        }
-
+        board = new Board(this);
+        getChildren().add(board);
     }
 
     @Override
@@ -51,14 +42,57 @@ public class ChessBoard extends Pane {
         background.setWidth(width);
         background.setHeight(height);
 
-        double cellWidth = width / 8.0;
-        double cellHeight = height / 8.0;
-
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                squares[i][j].relocate(i * cellWidth, j * cellHeight);
-                squares[i][j].resize(cellWidth, cellHeight);
-            }
-        }
+        double size = Math.min(width, height-200);
+        double space = (width-size)/2;
+        board.relocate(space, 0);
+        board.resize(width, height-200);
     }
+
+    private void fill(){
+        //WHITE
+        ChessColor color = ChessColor.WHITE;
+        // - PAWN
+        int row = 1;
+        for(int i = 0; i < 8; i++)
+            pieces.add(new Pawn(this, color, new Coordinate(row, i)));
+        // - ROOK
+        row = 0;
+        pieces.add(new Rook(this, color, new Coordinate(row, 0)));
+        pieces.add(new Rook(this, color, new Coordinate(row, 7)));
+        // - KNIGHT
+        pieces.add(new Knight(this, color, new Coordinate(row, 1)));
+        pieces.add(new Knight(this, color, new Coordinate(row, 6)));
+        // - BISHOP
+        pieces.add(new Bishop(this, color, new Coordinate(row, 2)));
+        pieces.add(new Bishop(this, color, new Coordinate(row, 5)));
+        // - QUEEN
+        pieces.add(new Queen(this, color, new Coordinate(row, 3)));
+        // - KING
+        whiteKing = new King(this, color, new Coordinate(row, 4));
+        pieces.add(whiteKing);
+
+        //BLACK
+        color = ChessColor.BLACK;
+        // - PAWN
+        row = 6;
+        for(int i = 0; i < 8; i++)
+            pieces.add(new Pawn(this, color, new Coordinate(row, i)));
+        // - ROOK
+        row = 7;
+        pieces.add(new Rook(this, color, new Coordinate(row, 0)));
+        pieces.add(new Rook(this, color, new Coordinate(row, 7)));
+        // - KNIGHT
+        pieces.add(new Knight(this, color, new Coordinate(row, 1)));
+        pieces.add(new Knight(this, color, new Coordinate(row, 6)));
+        // - BISHOP
+        pieces.add(new Bishop(this, color, new Coordinate(row, 2)));
+        pieces.add(new Bishop(this, color, new Coordinate(row, 5)));
+        // - QUEEN
+        pieces.add(new Queen(this, color, new Coordinate(row, 3)));
+        // - KING
+        blackKing = new King(this, color, new Coordinate(row, 4));
+        pieces.add(blackKing);
+
+    }
+
 }

@@ -14,4 +14,12 @@ public class Coordinate {
 
     @Getter private final int x, y;
 
+    public int getRealX() {
+        return 7-x;
+    }
+
+    public int getRealY() {
+        return y;
+    }
+
 }

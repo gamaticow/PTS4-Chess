@@ -12,7 +12,7 @@ import java.util.List;
 public class Pawn extends Piece {
 
     public Pawn(ChessBoard board, ChessColor color, Coordinate coordinate) {
-        super(board, color, coordinate);
+        super(board, color, coordinate, 'p');
     }
 
     @Override

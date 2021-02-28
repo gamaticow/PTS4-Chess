@@ -12,7 +12,7 @@ import java.util.List;
 public class King extends Piece {
 
     public King(ChessBoard board, ChessColor color, Coordinate coordinate) {
-        super(board, color, coordinate);
+        super(board, color, coordinate, 'k');
     }
 
     @Override
