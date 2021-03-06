@@ -1,6 +1,7 @@
 package pts4.view;
 
 import javafx.scene.layout.Pane;
+import lombok.Getter;
 import pts4.model.piece.ChessColor;
 import pts4.model.piece.Piece;
 
@@ -10,7 +11,7 @@ import pts4.model.piece.Piece;
 
 public class Board extends Pane {
 
-    private final Square[][] squares;
+    @Getter private final Square[][] squares;
 
     public Board(ChessBoard board) {
         squares = new Square[8][8];

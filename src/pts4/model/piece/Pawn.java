@@ -3,6 +3,8 @@ package pts4.model.piece;
 import pts4.view.ChessBoard;
 import pts4.model.Coordinate;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +19,21 @@ public class Pawn extends Piece {
 
     @Override
     public List<Coordinate> allMoveList() {
-        return null;
+        ArrayList<Coordinate> allPossibility = new ArrayList<>();
+        int direction = getColor() == ChessColor.WHITE ? 1 : -1;
+        if (!isHasMove()){
+            allPossibility.add(new Coordinate(this.getCoordinate().getX()+direction*2,this.getCoordinate().getY()));
+        }
+        if(getCoordinate().getX()<7 && getCoordinate().getX() > 0){
+            allPossibility.add(new Coordinate(this.getCoordinate().getX()+direction,this.getCoordinate().getY()));
+        }
+        if (getCoordinate().getY() <7 && (getCoordinate().getX() >0 && getCoordinate().getX() < 7)){
+            allPossibility.add(new Coordinate(this.getCoordinate().getX()+direction,this.getCoordinate().getY()+1));
+        }
+        if (getCoordinate().getY() > 0  && (getCoordinate().getX() >0 && getCoordinate().getX() < 7)){
+            allPossibility.add(new Coordinate(this.getCoordinate().getX()+direction,this.getCoordinate().getY()-1));
+        }
+        return allPossibility;
     }
 
     @Override

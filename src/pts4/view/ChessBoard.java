@@ -21,6 +21,7 @@ public class ChessBoard extends Pane {
 
     private final Rectangle background;
     private final Board board;
+    private Piece selected;
 
     public ChessBoard() {
         this.pieces = new ArrayList<>();
@@ -32,6 +33,25 @@ public class ChessBoard extends Pane {
         getChildren().add(background);
 
         board = new Board(this);
+
+
+        for(Piece piece : pieces) {
+            piece.getImage().setOnMouseClicked(event -> {
+                if(piece == selected)
+                    return;
+                selected = piece;
+                for(int i = 0; i < 8; i++) {
+                    for(int j = 0; j < 8; j++) {
+                        board.getSquares()[i][j].setSelected(false);
+                    }
+                }
+
+                for(Coordinate coordinate : piece.allMoveList()) {
+                    board.getSquares()[coordinate.getRealY()][coordinate.getRealX()].setSelected(true);
+                }
+            });
+        }
+
         getChildren().add(board);
     }
 
@@ -71,6 +91,9 @@ public class ChessBoard extends Pane {
         whiteKing = new King(this, color, new Coordinate(row, 4));
         pieces.add(whiteKing);
 
+        pieces.add(new Queen(this, color, new Coordinate(4, 4)));
+
+
         //BLACK
         color = ChessColor.BLACK;
         // - PAWN
@@ -93,6 +116,14 @@ public class ChessBoard extends Pane {
         blackKing = new King(this, color, new Coordinate(row, 4));
         pieces.add(blackKing);
 
+    }
+
+    public Piece getCoordinate(Coordinate coordinate) {
+        for(Piece piece : pieces){
+            if(piece.getCoordinate().equals(coordinate))
+                return piece;
+        }
+        return null;
     }
 
 }

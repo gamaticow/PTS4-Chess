@@ -22,11 +22,13 @@ public abstract class Piece {
     @Getter private final ChessColor color;
     @Getter private Coordinate coordinate;
     @Getter private final ImageView image;
+    @Getter private boolean hasMove;
 
     public Piece(ChessBoard board, ChessColor color, Coordinate coordinate, char piece){
         this.board = board;
         this.color = color;
         this.coordinate = coordinate;
+        this.hasMove = false;
 
         String name = String.valueOf(color.getPrefix()) + piece + ".png";
         //System.out.println(name);
@@ -62,8 +64,10 @@ public abstract class Piece {
     public void moveTo(Coordinate coordinate) {
         if(canMove(coordinate)) {
             //TODO remove eaten piece
+            this.hasMove = true;
             this.coordinate = coordinate;
         }
     }
+
 
 }

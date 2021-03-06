@@ -16,18 +16,17 @@ import pts4.model.piece.Rook;
 
 public class Square extends Group {
 
+    private final ChessColor color;
     private final Rectangle background;
     private Piece piece;
 
     public Square(ChessColor color) {
+        this.color = color;
         Translate pos = new Translate();
         background = new Rectangle();
         background.getTransforms().add(pos);
 
-        if(color == ChessColor.WHITE)
-            background.setFill(Color.web("#EEEED2"));
-        else if (color == ChessColor.BLACK)
-            background.setFill(Color.web("#769656"));
+        setSelected(false);
 
         getChildren().add(background);
     }
@@ -56,6 +55,17 @@ public class Square extends Group {
 
         getChildren().remove(piece.getImage());
         piece = null;
+    }
+
+    public void setSelected(boolean value) {
+        if(value)
+            background.setFill(Color.RED);
+        else {
+            if(color == ChessColor.WHITE)
+                background.setFill(Color.web("#EEEED2"));
+            else if (color == ChessColor.BLACK)
+                background.setFill(Color.web("#769656"));
+        }
     }
 
 }
