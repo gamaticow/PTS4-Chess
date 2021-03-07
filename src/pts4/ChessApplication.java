@@ -1,9 +1,9 @@
-package pts4.controller;
+package pts4;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import pts4.view.ChessBoard;
+import pts4.controller.ChessBoard;
 
 /**
  * Created by Corentin on 24/02/2021 at 11:47

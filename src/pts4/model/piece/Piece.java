@@ -1,12 +1,8 @@
 package pts4.model.piece;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import pts4.view.ChessBoard;
+import pts4.controller.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.io.File;
@@ -54,7 +50,8 @@ public abstract class Piece {
      * @return Si la pièce peux aller sur cette case
      */
     public boolean canMove(Coordinate coordinate) {
-        return moveList().contains(coordinate);
+        //TODO replace by moveList
+        return allMoveList().contains(coordinate);
     }
 
     /**

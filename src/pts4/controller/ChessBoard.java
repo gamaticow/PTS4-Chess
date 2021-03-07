@@ -1,4 +1,4 @@
-package pts4.view;
+package pts4.controller;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 import lombok.Getter;
 import pts4.model.Coordinate;
 import pts4.model.piece.*;
+import pts4.view.Board;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package pts4.model.piece;
 
-import pts4.view.ChessBoard;
+import pts4.controller.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package pts4.model.piece;
 
-import pts4.view.ChessBoard;
+import pts4.controller.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.ArrayList;
@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
  */
 
 public class Rook extends Piece {
-
-    private int x,y;
 
     public Rook(ChessBoard board, ChessColor color, Coordinate coordinate) {
         super(board, color, coordinate, 'r');

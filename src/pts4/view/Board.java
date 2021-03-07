@@ -2,6 +2,7 @@ package pts4.view;
 
 import javafx.scene.layout.Pane;
 import lombok.Getter;
+import pts4.controller.ChessBoard;
 import pts4.model.piece.ChessColor;
 import pts4.model.piece.Piece;
 
