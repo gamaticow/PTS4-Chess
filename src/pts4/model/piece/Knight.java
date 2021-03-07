@@ -5,6 +5,7 @@ import pts4.model.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:42
@@ -17,27 +18,28 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Coordinate> allMoveList() {ArrayList<Coordinate> allPossibility = new ArrayList<>();
-        if(getCoordinate().getX()<7 && getCoordinate().getY()<7){
-            allPossibility.add(new Coordinate(getCoordinate().getX()+2,getCoordinate().getY()+1));
-            allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()+2));
-        }
-        if (getCoordinate().getX()>0 && getCoordinate().getY()<7){
-            allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()+2));
-            allPossibility.add(new Coordinate(getCoordinate().getX()-2,getCoordinate().getY()+1));
-        }
-        if (getCoordinate().getX()>0 && getCoordinate().getY()>0){
-            allPossibility.add(new Coordinate(getCoordinate().getX()-2,getCoordinate().getY()-1));
-            allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()-2));
-        }
-        if (getCoordinate().getX()<7 && getCoordinate().getY()>0){
-            allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()-2));
-            allPossibility.add(new Coordinate(getCoordinate().getX()+2,getCoordinate().getY()-1));
-        }
-        return allPossibility;}
+    public List<Coordinate> allMoveList() {
+        ArrayList<Coordinate> allPossibility = new ArrayList<>();
+        //Tous les mouvement possible d'un cavalier
+        allPossibility.add(new Coordinate(getCoordinate().getX()+2,getCoordinate().getY()+1));
+        allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()+2));
+        allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()+2));
+        allPossibility.add(new Coordinate(getCoordinate().getX()-2,getCoordinate().getY()+1));
+        allPossibility.add(new Coordinate(getCoordinate().getX()-2,getCoordinate().getY()-1));
+        allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()-2));
+        allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()-2));
+        allPossibility.add(new Coordinate(getCoordinate().getX()+2,getCoordinate().getY()-1));
+
+        //On enlève tous les cases négatives
+        allPossibility.removeIf(coordinate -> coordinate.getX() < 0 || coordinate.getX() > 7 || coordinate.getY() < 0 || coordinate.getY() > 7);
+
+        //On enlève les case dupliquer dans la liste
+        return allPossibility.stream().distinct().collect(Collectors.toList());
+    }
 
     @Override
     public List<Coordinate> moveList() {
         return null;
     }
+
 }

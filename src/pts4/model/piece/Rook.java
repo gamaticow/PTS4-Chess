@@ -5,6 +5,7 @@ import pts4.model.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:42
@@ -20,36 +21,14 @@ public class Rook extends Piece {
 
     @Override
     public List<Coordinate> allMoveList() {
-        ArrayList<Coordinate> allPossibility = new ArrayList<>();
-        if(getCoordinate().getX()<7){
-            x= getCoordinate().getX();
-            while (x < 7){
-                x++;
-                allPossibility.add(new Coordinate(x,getCoordinate().getY()));
-            }
+        List<Coordinate> allPossibility = new ArrayList<>();
+        for(int i = 0; i < 8; i++) {
+            allPossibility.add(new Coordinate(getCoordinate().getX(), i));
+            allPossibility.add(new Coordinate(i, getCoordinate().getY()));
         }
-        if (getCoordinate().getX()> 0){
-            x= getCoordinate().getX();
-            while(x > 0){
-                x--;
-                allPossibility.add(new Coordinate(x,getCoordinate().getY()));
-            }
-        }
-        if (getCoordinate().getY() > 0){
-            y = getCoordinate().getY();
-            while(y > 0){
-                y--;
-                allPossibility.add(new Coordinate(getCoordinate().getX(),y));
-            }
-        }
-        if (getCoordinate().getY() < 7){
-            y = getCoordinate().getY();
-            while(y < 7 ){
-                y++;
-                allPossibility.add(new Coordinate(getCoordinate().getX(),y));
-            }
-        }
-        return allPossibility;
+        allPossibility.removeIf(coordinate -> coordinate.equals(getCoordinate()));
+        //On enlève les case dupliquer dans la liste
+        return allPossibility.stream().distinct().collect(Collectors.toList());
     }
 
     @Override

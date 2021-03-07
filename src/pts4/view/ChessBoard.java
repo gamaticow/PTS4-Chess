@@ -91,9 +91,6 @@ public class ChessBoard extends Pane {
         whiteKing = new King(this, color, new Coordinate(row, 4));
         pieces.add(whiteKing);
 
-        pieces.add(new Queen(this, color, new Coordinate(4, 4)));
-
-
         //BLACK
         color = ChessColor.BLACK;
         // - PAWN
@@ -116,6 +113,8 @@ public class ChessBoard extends Pane {
         blackKing = new King(this, color, new Coordinate(row, 4));
         pieces.add(blackKing);
 
+        //TODO remove test piece
+        pieces.add(new Knight(this, color, new Coordinate(4, 4)));
     }
 
     public Piece getCoordinate(Coordinate coordinate) {

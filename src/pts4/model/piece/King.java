@@ -5,6 +5,7 @@ import pts4.model.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:42
@@ -19,31 +20,26 @@ public class King extends Piece {
     @Override
     public List<Coordinate> allMoveList() {
         ArrayList<Coordinate> allPossibility = new ArrayList<>();
-        if(getCoordinate().getX()<7){
-            allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()));
+
+        //Ajout des possibilité de roque
+        if(!isHasMove()) {
+            allPossibility.add(new Coordinate(getCoordinate().getX(), getCoordinate().getY()+2));
+            allPossibility.add(new Coordinate(getCoordinate().getX(), getCoordinate().getY()-2));
         }
-        if(getCoordinate().getX()<7 && getCoordinate().getY()<7 ){
-            allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()+1));
+
+        //Ajout de tous le mouvements possible
+        for(int x = -1; x <= 1; x++) {
+            for(int y = -1; y <= 1; y++) {
+                allPossibility.add(new Coordinate(getCoordinate().getX()+x, getCoordinate().getY()+y));
+            }
         }
-        if(getCoordinate().getY()<7){
-            allPossibility.add(new Coordinate(getCoordinate().getX(),getCoordinate().getY()+1));
-        }
-        if(getCoordinate().getX()>0 && getCoordinate().getY()<7){
-            allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()+1));
-        }
-        if(getCoordinate().getX()>0){
-            allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()));
-        }
-        if(getCoordinate().getY()<7 && getCoordinate().getX()>0){
-            allPossibility.add(new Coordinate(getCoordinate().getX()-1,getCoordinate().getY()-1));
-        }
-        if(getCoordinate().getY()>0){
-            allPossibility.add(new Coordinate(getCoordinate().getX(),getCoordinate().getY()-1));
-        }
-        if(getCoordinate().getX()<7 && getCoordinate().getY()>0){
-            allPossibility.add(new Coordinate(getCoordinate().getX()+1,getCoordinate().getY()-1));
-        }
-        return allPossibility;
+
+        //On enlève tous les cases négatives
+        allPossibility.removeIf(coordinate -> coordinate.getX() < 0 || coordinate.getX() > 7 || coordinate.getY() < 0 || coordinate.getY() > 7);
+        //On enlève la case courante de la pièce
+        allPossibility.removeIf(coordinate -> coordinate.equals(getCoordinate()));
+        //On enlève les case dupliquer dans la liste
+        return allPossibility.stream().distinct().collect(Collectors.toList());
     }
 
     @Override
