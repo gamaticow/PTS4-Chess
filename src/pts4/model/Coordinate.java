@@ -1,18 +1,19 @@
 package pts4.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:47
  */
 
-@EqualsAndHashCode
-@AllArgsConstructor
+@EqualsAndHashCode (exclude = {"tag"})
+@RequiredArgsConstructor
+@ToString (exclude = {"tag"})
 public class Coordinate {
 
-    @Getter private final int x, y;
+    @NonNull @Getter private final int x, y;
+    @Accessors(fluent = true) @Getter @Setter private String tag;
 
     public int getRealX() {
         return 7-x;

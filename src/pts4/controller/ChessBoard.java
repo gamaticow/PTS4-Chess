@@ -49,7 +49,7 @@ public class ChessBoard extends Pane {
                     }
                 }
 
-                for(Coordinate coordinate : piece.allMoveList()) {
+                for(Coordinate coordinate : piece.moveList()) {
                     board.getSquares()[coordinate.getRealY()][coordinate.getRealX()].setSelected(true);
                 }
             });

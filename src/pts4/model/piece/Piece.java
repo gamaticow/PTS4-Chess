@@ -50,9 +50,7 @@ public abstract class Piece {
      * @return Si la pièce peux aller sur cette case
      */
     public boolean canMove(Coordinate coordinate) {
-        //TODO replace by moveList
-        System.out.println(allMoveList());
-        return allMoveList().contains(coordinate);
+        return moveList().contains(coordinate);
     }
 
     /**

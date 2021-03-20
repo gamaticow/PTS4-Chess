@@ -44,7 +44,9 @@ public class King extends Piece {
 
     @Override
     public List<Coordinate> moveList() {
-        return null;
+        List<Coordinate> move = allMoveList();
+
+        return move;
     }
 
     /**

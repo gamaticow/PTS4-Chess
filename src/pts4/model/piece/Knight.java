@@ -4,6 +4,7 @@ import pts4.controller.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,17 @@ public class Knight extends Piece {
 
     @Override
     public List<Coordinate> moveList() {
-        return null;
+        List<Coordinate> move = allMoveList();
+
+        Iterator<Coordinate> iterator = move.iterator();
+        while (iterator.hasNext()) {
+            Coordinate coordinate = iterator.next();
+            Piece pieceOn = getBoard().getCoordinate(coordinate);
+            if(pieceOn != null && pieceOn.getColor() == getColor())
+                iterator.remove();
+        }
+
+        return move;
     }
 
 }
