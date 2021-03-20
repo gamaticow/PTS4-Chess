@@ -51,6 +51,7 @@ public abstract class Piece {
      */
     public boolean canMove(Coordinate coordinate) {
         //TODO replace by moveList
+        System.out.println(allMoveList());
         return allMoveList().contains(coordinate);
     }
 
@@ -58,12 +59,15 @@ public abstract class Piece {
      * Déplace la pièce
      * @param coordinate Case sur laquel déplacer la pièce
      */
-    public void moveTo(Coordinate coordinate) {
+    public boolean moveTo(Coordinate coordinate) {
+        System.out.println(coordinate);
         if(canMove(coordinate)) {
             //TODO remove eaten piece
             this.hasMove = true;
             this.coordinate = coordinate;
+            return true;
         }
+        return false;
     }
 
 

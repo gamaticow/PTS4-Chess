@@ -7,9 +7,12 @@ import lombok.Getter;
 import pts4.model.Coordinate;
 import pts4.model.piece.*;
 import pts4.view.Board;
+import pts4.view.Square;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:44
@@ -35,7 +38,6 @@ public class ChessBoard extends Pane {
 
         board = new Board(this);
 
-
         for(Piece piece : pieces) {
             piece.getImage().setOnMouseClicked(event -> {
                 if(piece == selected)
@@ -49,6 +51,16 @@ public class ChessBoard extends Pane {
 
                 for(Coordinate coordinate : piece.allMoveList()) {
                     board.getSquares()[coordinate.getRealY()][coordinate.getRealX()].setSelected(true);
+                }
+            });
+        }
+
+        for (Square square : board.getSquareList()) {
+            square.setOnMouseClicked(event -> {
+                if(selected != null) {
+                    if(selected.moveTo(square.getCoordinate())) {
+                        revalidate();
+                    }
                 }
             });
         }
@@ -113,9 +125,6 @@ public class ChessBoard extends Pane {
         // - KING
         blackKing = new King(this, color, new Coordinate(row, 4));
         pieces.add(blackKing);
-
-        //TODO remove test piece
-        pieces.add(new Knight(this, color, new Coordinate(4, 4)));
     }
 
     public Piece getCoordinate(Coordinate coordinate) {
@@ -124,6 +133,11 @@ public class ChessBoard extends Pane {
                 return piece;
         }
         return null;
+    }
+
+    public void revalidate() {
+        selected = null;
+        board.revalidate();
     }
 
 }

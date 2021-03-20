@@ -1,14 +1,13 @@
 package pts4.view;
 
 import javafx.scene.Group;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Translate;
+import lombok.Getter;
 import pts4.model.Coordinate;
 import pts4.model.piece.ChessColor;
 import pts4.model.piece.Piece;
-import pts4.model.piece.Rook;
 
 /**
  * Created by Corentin on 24/02/2021 at 11:51
@@ -17,11 +16,13 @@ import pts4.model.piece.Rook;
 public class Square extends Group {
 
     private final ChessColor color;
+    @Getter private final Coordinate coordinate;
     private final Rectangle background;
     private Piece piece;
 
-    public Square(ChessColor color) {
+    public Square(ChessColor color, Coordinate coordinate) {
         this.color = color;
+        this.coordinate = coordinate;
         Translate pos = new Translate();
         background = new Rectangle();
         background.getTransforms().add(pos);
