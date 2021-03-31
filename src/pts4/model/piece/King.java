@@ -4,6 +4,7 @@ import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +46,15 @@ public class King extends Piece {
     @Override
     public List<Coordinate> moveList() {
         List<Coordinate> move = allMoveList();
-
+        Iterator<Coordinate> iterator = move.iterator();
+        while (iterator.hasNext()) {
+            Coordinate coordinate = iterator.next();
+            Piece pieceOn = getBoard().getCoordinate(coordinate);
+            if(pieceOn != null && pieceOn.getColor() == getColor())
+                iterator.remove();
+        }
         return move;
+        //rajoute en cas d'échec
     }
 
     /**
