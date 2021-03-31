@@ -1,6 +1,7 @@
 package pts4.model;
 
 import lombok.Getter;
+import pts4.controller.GameController;
 import pts4.model.piece.*;
 import pts4.model.player.LocalPlayer;
 import pts4.model.player.Player;
@@ -20,6 +21,8 @@ public class ChessBoard {
     @Getter private final List<Piece> pieces;
     @Getter private Player p1, p2;
 
+    private GameController toRevalidate;
+
     private ChessBoard() {
         pieces = new ArrayList<>();
     }
@@ -34,6 +37,16 @@ public class ChessBoard {
         p1.setTurn(true);
         p2.setBoard(this);
         p2.setTurn(false);
+    }
+
+    public void swapPlaying() {
+        if(p1.isTurn()) {
+            p1.setTurn(false);
+            p2.setTurn(true);
+        } else {
+            p2.setTurn(false);
+            p1.setTurn(true);
+        }
     }
 
     private void fill(){
@@ -136,6 +149,15 @@ public class ChessBoard {
         }
 
         return board;
+    }
+
+    public void setRevalidate(GameController controller) {
+        this.toRevalidate = controller;
+    }
+
+    public void revalidate() {
+        if(toRevalidate != null)
+            toRevalidate.revalidate();
     }
 
 }

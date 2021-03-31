@@ -1,10 +1,13 @@
 package pts4.model.socket;
 
+import javafx.application.Platform;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import pts4.ChessApplication;
 import pts4.model.ChessBoard;
+import pts4.model.Coordinate;
+import pts4.model.piece.Piece;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -52,6 +55,15 @@ public class LanServer implements Runnable {
                 out.writeUTF(packet.toString());
             }else if(type == 2) {
                 out.writeUTF(board.getP1().isTurn() ? "1" : "2");
+            }else if(type == 3) {
+                out.writeUTF(Piece.lastMove);
+            }else if(type == 4) {
+                String data = in.readUTF();
+                Coordinate c1 = new Coordinate(Integer.parseInt(String.valueOf(data.charAt(0))), Integer.parseInt(String.valueOf(data.charAt(1))));
+                Coordinate c2 = new Coordinate(Integer.parseInt(String.valueOf(data.charAt(2))), Integer.parseInt(String.valueOf(data.charAt(3))));
+                board.getPiece(c1).moveTo(c2);
+                board.swapPlaying();
+                Platform.runLater(board::revalidate);
             }
         }
 

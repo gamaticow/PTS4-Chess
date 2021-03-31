@@ -1,5 +1,6 @@
 package pts4.controller;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -29,12 +30,15 @@ public class GameController extends Pane {
     private final Board board;
     private Piece selected;
 
+    private SocketClient client;
+
     private GameController(Player player1, Player player2) {
         this(new ChessBoard(player1, player2));
     }
 
     private GameController(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
+        chessBoard.setRevalidate(this);
 
         background = new Rectangle();
         background.setFill(Color.WHITE);
@@ -81,8 +85,10 @@ public class GameController extends Pane {
         } else {
             if(selected != null) {
                 if(selected.moveTo(coordinate)) {
+                    if(client != null)
+                        client.move(Piece.lastMove);
                     selected = null;
-                    swapPlaying();
+                    chessBoard.swapPlaying();
                     revalidate();
                 }
             }
@@ -91,16 +97,6 @@ public class GameController extends Pane {
 
     private Player getPlaying() {
         return chessBoard.getP1().isTurn() ? chessBoard.getP1() : chessBoard.getP2();
-    }
-
-    private void swapPlaying() {
-        if(chessBoard.getP1().isTurn()) {
-            chessBoard.getP1().setTurn(false);
-            chessBoard.getP2().setTurn(true);
-        } else {
-            chessBoard.getP2().setTurn(false);
-            chessBoard.getP1().setTurn(true);
-        }
     }
 
     @Override
@@ -131,6 +127,7 @@ public class GameController extends Pane {
     }
 
     private void runRefreshThread(SocketClient client) {
+        this.client = client;
         new Thread(() -> {
             while(true) {
                 try {
@@ -140,15 +137,14 @@ public class GameController extends Pane {
                 }
                 String turn = client.getTurn();
                 if(turn.equals("1") && !chessBoard.getP1().isTurn() || turn.equals("2") && !chessBoard.getP2().isTurn()) {
-                    if(turn.equals("1")) {
-                        chessBoard.getP1().setTurn(true);
-                        chessBoard.getP2().setTurn(false);
-                    }else {
-                        chessBoard.getP2().setTurn(true);
-                        chessBoard.getP1().setTurn(false);
-                    }
-                    //TODO refresh check board
-                    System.out.println("Move");
+                    String data = client.getLastMove();
+                    Coordinate c1 = new Coordinate(Integer.parseInt(String.valueOf(data.charAt(0))), Integer.parseInt(String.valueOf(data.charAt(1))));
+                    Coordinate c2 = new Coordinate(Integer.parseInt(String.valueOf(data.charAt(2))), Integer.parseInt(String.valueOf(data.charAt(3))));
+
+                    chessBoard.swapPlaying();
+                    chessBoard.getPiece(c1).moveTo(c2);
+
+                    Platform.runLater(this::revalidate);
                 }
             }
         }).start();

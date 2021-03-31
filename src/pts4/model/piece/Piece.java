@@ -15,6 +15,8 @@ import java.util.List;
 
 public abstract class Piece {
 
+    public static String lastMove;
+
     @Getter private final ChessBoard board;
     @Getter private final ChessColor color;
     @Getter private Coordinate coordinate;
@@ -69,6 +71,8 @@ public abstract class Piece {
                     return false;
                 }
             }
+
+            lastMove = "" + getCoordinate().getX() + getCoordinate().getY() + coordinate.getX() + coordinate.getY();
 
             this.hasMove = true;
             this.coordinate = coordinate;

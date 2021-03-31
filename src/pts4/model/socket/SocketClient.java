@@ -38,6 +38,17 @@ public class SocketClient {
         return send(2);
     }
 
+    public String getLastMove() {
+        return send(3);
+    }
+
+    @SneakyThrows
+    public void move(String data) {
+        out.writeByte(4);
+        out.writeUTF(data);
+        out.flush();
+    }
+
     @SneakyThrows
     private String send(int data) {
         out.writeByte(data);
