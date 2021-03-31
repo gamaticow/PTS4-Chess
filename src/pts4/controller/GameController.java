@@ -30,6 +30,8 @@ public class GameController extends Pane {
     private final Board board;
     private Piece selected;
 
+    @Getter private Player winner = null;
+
     private SocketClient client;
 
     private GameController(Player player1, Player player2) {
@@ -68,6 +70,8 @@ public class GameController extends Pane {
     }
 
     private void click(Coordinate coordinate) {
+        if(winner != null)
+            return;
         Player player = getPlaying();
         if(!(player instanceof LocalPlayer))
             return;
@@ -79,16 +83,25 @@ public class GameController extends Pane {
                     board.getSquares()[i][j].setSelected(false);
                 }
             }
-            for(Coordinate c : pieceOn.moveList()) {
+            for(Coordinate c : new CheckDetector(chessBoard, pieceOn.getColor()).getMoveFor(pieceOn)) {
                 board.getSquares()[c.getRealY()][c.getRealX()].setSelected(true);
             }
+
         } else {
-            if(selected != null) {
+            if(selected != null && new CheckDetector(chessBoard, selected.getColor()).getMoveFor(selected).contains(coordinate)) {
                 if(selected.moveTo(coordinate)) {
                     if(client != null)
                         client.move(Piece.lastMove);
                     selected = null;
                     chessBoard.swapPlaying();
+
+                    if(!new CheckDetector(chessBoard, getPlaying().getColor()).hasMove()) {
+                        if(chessBoard.getP1().isTurn())
+                            winner = chessBoard.getP2();
+                        else
+                            winner = chessBoard.getP1();
+                    }
+
                     revalidate();
                 }
             }
@@ -141,13 +154,24 @@ public class GameController extends Pane {
                     Coordinate c1 = new Coordinate(Integer.parseInt(String.valueOf(data.charAt(0))), Integer.parseInt(String.valueOf(data.charAt(1))));
                     Coordinate c2 = new Coordinate(Integer.parseInt(String.valueOf(data.charAt(2))), Integer.parseInt(String.valueOf(data.charAt(3))));
 
-                    chessBoard.swapPlaying();
                     chessBoard.getPiece(c1).moveTo(c2);
+                    chessBoard.swapPlaying();
+
+                    if(!new CheckDetector(chessBoard, getPlaying().getColor()).hasMove()) {
+                        if(chessBoard.getP1().isTurn())
+                            winner = chessBoard.getP2();
+                        else
+                            winner = chessBoard.getP1();
+                    }
 
                     Platform.runLater(this::revalidate);
                 }
             }
         }).start();
+    }
+
+    public boolean isEnd() {
+        return winner != null;
     }
 
     public static GameController startView(Stage primaryStage, Player p1, Player p2) {

@@ -1,6 +1,11 @@
 package pts4.view;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import lombok.Getter;
 import pts4.controller.GameController;
 import pts4.model.Coordinate;
@@ -20,6 +25,7 @@ public class Board extends Pane {
     @Getter private final Square[][] squares;
     @Getter private final List<Square> squareList;
     private final GameController board;
+    private final Text text;
 
     public Board(GameController board) {
         this.board = board;
@@ -42,6 +48,14 @@ public class Board extends Pane {
 
         squareList = Arrays.stream(squares).flatMap(Arrays::stream).collect(Collectors.toList());
 
+        text = new Text("");
+        text.setFont(Font.font(null, FontWeight.BOLD, 40));
+        text.setFill(Color.RED);
+        text.setTextAlignment(TextAlignment.CENTER);
+        //text.setX(-50);
+        text.setY(100);
+        getChildren().add(text);
+
         revalidate();
     }
 
@@ -53,6 +67,10 @@ public class Board extends Pane {
         for(Square square : squareList) {
             square.setSelected(false);
         }
+
+        if(board.isEnd()) {
+            text.setText("Partie gagnée par " + board.getWinner().getName());
+        }
     }
 
     @Override
@@ -61,6 +79,8 @@ public class Board extends Pane {
 
         double size = Math.min(width, height);
         double cell = size / 8.0;
+
+        text.setY(size / 2.0);
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {

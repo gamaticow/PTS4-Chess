@@ -41,6 +41,6 @@ public class Info extends Group {
     }
 
     public void revalidate() {
-        name.setText(player.getName() + (player.isTurn() ? " (En train de jouer)" : ""));
+        name.setText(player.getName() + (player.isTurn() ? " (En train de jouer)" : "") + (player.isCheck() ? " En echec" : ""));
     }
 }

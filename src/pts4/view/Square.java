@@ -58,7 +58,10 @@ public class Square extends Group {
         piece = null;
     }
 
+    @Getter private boolean selected = false;
+
     public void setSelected(boolean value) {
+        this.selected = value;
         if(value)
             background.setFill(Color.RED);
         else {

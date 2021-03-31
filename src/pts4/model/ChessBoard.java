@@ -1,6 +1,7 @@
 package pts4.model;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import pts4.controller.GameController;
 import pts4.model.piece.*;
 import pts4.model.player.LocalPlayer;
@@ -43,9 +44,15 @@ public class ChessBoard {
         if(p1.isTurn()) {
             p1.setTurn(false);
             p2.setTurn(true);
+
+            p1.setCheck(false);
+            p2.setCheck(new CheckDetector(this, p2.getColor()).isCheck());
         } else {
             p2.setTurn(false);
             p1.setTurn(true);
+
+            p2.setCheck(false);
+            p1.setCheck(new CheckDetector(this, p1.getColor()).isCheck());
         }
     }
 
@@ -127,7 +134,14 @@ public class ChessBoard {
         DataPacket packet = DataPacket.from(string);
 
         for(int i = 0; i < Integer.parseInt(packet.read("size")); i++) {
-            board.pieces.add(Piece.from(board, packet.read("piece"+i)));
+            Piece piece = Piece.from(board, packet.read("piece"+i));
+            board.pieces.add(piece);
+            if(piece instanceof King) {
+                if(piece.getColor() == ChessColor.WHITE)
+                    board.whiteKing = (King) piece;
+                else if(piece.getColor() == ChessColor.BLACK)
+                    board.blackKing = (King) piece;
+            }
         }
 
         if(packet.read("you").equals("1")) {
@@ -160,4 +174,20 @@ public class ChessBoard {
             toRevalidate.revalidate();
     }
 
+    @SneakyThrows
+    @Override
+    public ChessBoard clone() throws CloneNotSupportedException {
+        ChessBoard board = new ChessBoard(new LocalPlayer("", ChessColor.WHITE), new LocalPlayer("", ChessColor.BLACK));
+        board.pieces.clear();
+        for(Piece piece : pieces) {
+            if(!(piece instanceof King))
+                board.pieces.add(piece.clone(board));
+        }
+        board.whiteKing = (King) whiteKing.clone(board);
+        board.pieces.add(board.whiteKing);
+        board.blackKing = (King) blackKing.clone(board);
+        board.pieces.add(board.blackKing);
+
+        return board;
+    }
 }

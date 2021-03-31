@@ -23,10 +23,10 @@ public class King extends Piece {
         ArrayList<Coordinate> allPossibility = new ArrayList<>();
 
         //Ajout des possibilité de roque
-        if(!isHasMove()) {
+        /*if(!isHasMove()) {
             allPossibility.add(new Coordinate(getCoordinate().getX(), getCoordinate().getY()+2));
             allPossibility.add(new Coordinate(getCoordinate().getX(), getCoordinate().getY()-2));
-        }
+        }*/
 
         //Ajout de tous le mouvements possible
         for(int x = -1; x <= 1; x++) {

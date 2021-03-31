@@ -25,4 +25,8 @@ public class Coordinate implements Serializable {
         return y;
     }
 
+    @Override
+    public Coordinate clone() throws CloneNotSupportedException {
+        return new Coordinate(x, y);
+    }
 }

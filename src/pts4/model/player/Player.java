@@ -19,6 +19,8 @@ public abstract class Player {
     @Getter @Setter private String name;
     @Getter @Setter private boolean turn;
 
+    @Getter @Setter private boolean check = false;
+
     public Player(String name, ChessColor color) {
         this.name = name;
         this.color = color;

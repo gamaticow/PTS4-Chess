@@ -7,6 +7,7 @@ import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -61,6 +62,10 @@ public abstract class Piece {
      * @param coordinate Case sur laquel déplacer la pièce
      */
     public boolean moveTo(Coordinate coordinate) {
+        return moveTo(coordinate, true);
+    }
+
+    public boolean moveTo(Coordinate coordinate, boolean submit) {
         //System.out.println(coordinate);
         if(canMove(coordinate)) {
             Piece pieceOn = board.getPiece(coordinate);
@@ -72,7 +77,8 @@ public abstract class Piece {
                 }
             }
 
-            lastMove = "" + getCoordinate().getX() + getCoordinate().getY() + coordinate.getX() + coordinate.getY();
+            if(submit)
+                lastMove = "" + getCoordinate().getX() + getCoordinate().getY() + coordinate.getX() + coordinate.getY();
 
             this.hasMove = true;
             this.coordinate = coordinate;
@@ -127,4 +133,7 @@ public abstract class Piece {
         return piece;
     }
 
+    public Piece clone(ChessBoard board) throws CloneNotSupportedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        return getClass().getDeclaredConstructor(ChessBoard.class, ChessColor.class, Coordinate.class).newInstance(board, color, coordinate.clone());
+    }
 }

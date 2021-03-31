@@ -18,6 +18,6 @@
 
    <!-- SERVEUR -->
    <Text layoutX="13.0" layoutY="141.0" text="Jouer sur un serveur :" />
-   <TextField layoutX="14.0" layoutY="158.0" promptText="Ip du serveur" fx:id="serverIp" />
-   <Button layoutX="182.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#connect" text="Connexion" />
+   <TextField layoutX="14.0" layoutY="158.0" promptText="Ip du serveur" fx:id="serverIp" disable="true" />
+   <Button layoutX="182.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#connect" text="Connexion" disable="true" />
 </AnchorPane>

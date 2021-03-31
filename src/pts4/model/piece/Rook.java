@@ -91,8 +91,6 @@ public class Rook extends Piece {
             }
         }
 
-        System.out.println(vF);
-
         Iterator<Coordinate> iterator = move.iterator();
         while (iterator.hasNext()) {
             Coordinate coordinate = iterator.next();
