@@ -65,7 +65,7 @@ public class Queen extends Piece {
         int vF = 7,vB = 7,hL = 0,hR = 7;
 
         for(Coordinate coordinate : move) {
-            Piece pieceOn = getBoard().getCoordinate(coordinate);
+            Piece pieceOn = getBoard().getPiece(coordinate);
             if(pieceOn == null)
                 continue;
             if(coordinate.tag().contains(V)) {
