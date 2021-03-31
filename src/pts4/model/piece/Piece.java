@@ -2,10 +2,11 @@ package pts4.model.piece;
 
 import javafx.scene.image.ImageView;
 import lombok.Getter;
-import pts4.controller.ChessBoard;
+import pts4.controller.GameController;
+import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
-import java.io.File;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public abstract class Piece {
     @Getter private final ImageView image;
     @Getter private boolean hasMove;
 
+
     public Piece(ChessBoard board, ChessColor color, Coordinate coordinate, char piece){
         this.board = board;
         this.color = color;
@@ -27,7 +29,6 @@ public abstract class Piece {
         this.hasMove = false;
 
         String name = String.valueOf(color.getPrefix()) + piece + ".png";
-        //System.out.println(name);
         File image = new File(Piece.class.getClassLoader().getResource(name).getFile());
         this.image = new ImageView(image.toURI().toString());
     }
@@ -58,9 +59,17 @@ public abstract class Piece {
      * @param coordinate Case sur laquel déplacer la pièce
      */
     public boolean moveTo(Coordinate coordinate) {
-        System.out.println(coordinate);
+        //System.out.println(coordinate);
         if(canMove(coordinate)) {
-            //TODO remove eaten piece
+            Piece pieceOn = board.getPiece(coordinate);
+            if(pieceOn != null) {
+                if (pieceOn.color != color) {
+                    board.getPieces().remove(pieceOn);
+                } else {
+                    return false;
+                }
+            }
+
             this.hasMove = true;
             this.coordinate = coordinate;
             return true;
@@ -68,5 +77,50 @@ public abstract class Piece {
         return false;
     }
 
+    public String toString() {
+        String out = "";
+
+        String name = getClass().getSimpleName();
+        if(name.equals("Knight"))
+            name = "n";
+
+        out += Character.toLowerCase(name.charAt(0));
+        out += Character.toLowerCase(getColor().toString().charAt(0));
+        out += getCoordinate().getX();
+        out += getCoordinate().getY();
+
+        return out;
+    }
+
+    public static Piece from(ChessBoard board, String string) {
+        Piece piece = null;
+        ChessColor color = ChessColor.WHITE;
+        if(string.charAt(1) == 'b')
+            color = ChessColor.BLACK;
+
+        Coordinate coordinate = new Coordinate(Integer.parseInt(String.valueOf(string.charAt(2))), Integer.parseInt(String.valueOf(string.charAt(3))));
+
+        switch (string.charAt(0)) {
+            case 'b':
+                piece = new Bishop(board, color, coordinate);
+                break;
+            case 'k':
+                piece = new King(board, color, coordinate);
+                break;
+            case 'n':
+                piece = new Knight(board, color, coordinate);
+                break;
+            case 'p':
+                piece = new Pawn(board, color, coordinate);
+                break;
+            case 'q':
+                piece = new Queen(board, color, coordinate);
+                break;
+            case 'r':
+                piece = new Rook(board, color, coordinate);
+        }
+
+        return piece;
+    }
 
 }

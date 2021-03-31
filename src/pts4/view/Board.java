@@ -2,7 +2,7 @@ package pts4.view;
 
 import javafx.scene.layout.Pane;
 import lombok.Getter;
-import pts4.controller.ChessBoard;
+import pts4.controller.GameController;
 import pts4.model.Coordinate;
 import pts4.model.piece.ChessColor;
 import pts4.model.piece.Piece;
@@ -19,9 +19,9 @@ public class Board extends Pane {
 
     @Getter private final Square[][] squares;
     @Getter private final List<Square> squareList;
-    private final ChessBoard board;
+    private final GameController board;
 
-    public Board(ChessBoard board) {
+    public Board(GameController board) {
         this.board = board;
         squares = new Square[8][8];
 
@@ -46,7 +46,7 @@ public class Board extends Pane {
     }
 
     public void revalidate() {
-        for (Piece piece : board.getPieces()) {
+        for (Piece piece : board.getChessBoard().getPieces()) {
             setPiece(piece);
         }
 

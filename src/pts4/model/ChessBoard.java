@@ -1,84 +1,39 @@
-package pts4.controller;
+package pts4.model;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import lombok.Getter;
-import pts4.model.Coordinate;
 import pts4.model.piece.*;
-import pts4.view.Board;
-import pts4.view.Square;
+import pts4.model.player.LocalPlayer;
+import pts4.model.player.Player;
+import pts4.model.player.RemotePlayer;
+import pts4.model.socket.DataPacket;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Created by Corentin on 20/02/2021 at 12:44
+ * Created by Corentin on 30/03/2021 at 18:54
  */
 
-public class ChessBoard extends Pane {
+public class ChessBoard {
 
     @Getter private King whiteKing, blackKing;
     @Getter private final List<Piece> pieces;
+    @Getter private Player p1, p2;
 
-    private final Rectangle background;
-    private final Board board;
-    private Piece selected;
+    private ChessBoard() {
+        pieces = new ArrayList<>();
+    }
 
-    public ChessBoard() {
+    public ChessBoard(Player p1, Player p2) {
+        this.p1 = p1;
+        this.p2 = p2;
         this.pieces = new ArrayList<>();
         fill();
 
-        background = new Rectangle();
-        background.setFill(Color.WHITE);
-
-        getChildren().add(background);
-
-        board = new Board(this);
-
-        for(Piece piece : pieces) {
-            piece.getImage().setOnMouseClicked(event -> {
-                if(piece == selected)
-                    return;
-                selected = piece;
-                for(int i = 0; i < 8; i++) {
-                    for(int j = 0; j < 8; j++) {
-                        board.getSquares()[i][j].setSelected(false);
-                    }
-                }
-
-                for(Coordinate coordinate : piece.moveList()) {
-                    board.getSquares()[coordinate.getRealY()][coordinate.getRealX()].setSelected(true);
-                }
-            });
-        }
-
-        for (Square square : board.getSquareList()) {
-            square.setOnMouseClicked(event -> {
-                if(selected != null) {
-                    if(selected.moveTo(square.getCoordinate())) {
-                        revalidate();
-                    }
-                }
-            });
-        }
-
-        getChildren().add(board);
-    }
-
-    @Override
-    public void resize(double width, double height) {
-        super.resize(width, height);
-
-        background.setWidth(width);
-        background.setHeight(height);
-
-        double size = Math.min(width, height-200);
-        double space = (width-size)/2;
-        board.relocate(space, 0);
-        board.resize(width, height-200);
+        p1.setBoard(this);
+        p1.setTurn(true);
+        p2.setBoard(this);
+        p2.setTurn(false);
     }
 
     private void fill(){
@@ -127,7 +82,7 @@ public class ChessBoard extends Pane {
         pieces.add(blackKing);
     }
 
-    public Piece getCoordinate(Coordinate coordinate) {
+    public Piece getPiece(Coordinate coordinate) {
         for(Piece piece : pieces){
             if(piece.getCoordinate().equals(coordinate))
                 return piece;
@@ -135,9 +90,52 @@ public class ChessBoard extends Pane {
         return null;
     }
 
-    public void revalidate() {
-        selected = null;
-        board.revalidate();
+    public DataPacket toData() {
+        DataPacket packet = new DataPacket();
+
+        int i = 0;
+        for(Piece piece : pieces) {
+            packet.write("piece"+i, piece.toString());
+            i++;
+        }
+
+        packet.write("size", String.valueOf(i));
+
+        packet.write("p1", p1.getName());
+        packet.write("p2", p2.getName());
+
+        packet.write("turn", p1.isTurn() ? "1" : "2");
+
+        return packet;
+    }
+
+    public static ChessBoard from(String string) {
+        ChessBoard board = new ChessBoard();
+        DataPacket packet = DataPacket.from(string);
+
+        for(int i = 0; i < Integer.parseInt(packet.read("size")); i++) {
+            board.pieces.add(Piece.from(board, packet.read("piece"+i)));
+        }
+
+        if(packet.read("you").equals("1")) {
+            board.p1 = new LocalPlayer(packet.read("p1"), ChessColor.WHITE);
+            board.p2 = new RemotePlayer(ChessColor.WHITE);
+            board.p2.setName(packet.read("p2"));
+        }else {
+            board.p2 = new LocalPlayer(packet.read("p2"), ChessColor.BLACK);
+            board.p1 = new RemotePlayer(ChessColor.WHITE);
+            board.p1.setName(packet.read("p1"));
+        }
+
+        if(packet.read("turn").equals("1")) {
+            board.p1.setTurn(true);
+            board.p2.setTurn(false);
+        }else {
+            board.p2.setTurn(true);
+            board.p1.setTurn(false);
+        }
+
+        return board;
     }
 
 }

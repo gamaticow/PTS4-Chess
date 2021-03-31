@@ -1,6 +1,7 @@
 package pts4.model.piece;
 
-import pts4.controller.ChessBoard;
+import pts4.controller.GameController;
+import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class Rook extends Piece {
         int hR = 7;
 
         for(Coordinate coordinate : move) {
-            Piece pieceOn = getBoard().getCoordinate(coordinate);
+            Piece pieceOn = getBoard().getPiece(coordinate);
             if(pieceOn == null)
                 continue;
             if(coordinate.tag().contains(V)) {

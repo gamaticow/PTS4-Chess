@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pts4.controller.ModeController" fx:id="stage">
+   <!-- LOCAL -->
+   <Text layoutX="13.0" layoutY="27.0" text="Jouer en local (2 joueurs sur le meme ordinateur) :" />
+   <Button layoutX="13.0" layoutY="32.0" mnemonicParsing="false" onMouseClicked="#local" text="Jouer" />
+
+   <!-- LAN -->
+   <Text layoutX="14.0" layoutY="80.0" text="Jouer en lan (2 joueurs sur le réseau) :" />
+   <Button layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#host" text="Héberger" />
+   <Separator layoutX="78.0" layoutY="91.0" orientation="VERTICAL" prefHeight="25.0" prefWidth="21.0" />
+   <TextField layoutX="96.0" layoutY="91.0" promptText="Adresse ip" fx:id="lanIp"/>
+   <Button layoutX="256.0" layoutY="91.0" mnemonicParsing="false" onMouseClicked="#join" text="Rejoindre" />
+
+   <!-- SERVEUR -->
+   <Text layoutX="13.0" layoutY="141.0" text="Jouer sur un serveur :" />
+   <TextField layoutX="14.0" layoutY="158.0" promptText="Ip du serveur" fx:id="serverIp" />
+   <Button layoutX="182.0" layoutY="158.0" mnemonicParsing="false" onMouseClicked="#connect" text="Connexion" />
+</AnchorPane>
