@@ -15,17 +15,17 @@ import java.util.stream.Collectors;
 
 public class Rook extends Piece {
 
-    public static final String H = "1";
-    public static final String V = "2";
-    public static final String FRONT = "3";
-    public static final String RIGHT = FRONT;
-    public static final String BACK = "4";
-    public static final String LEFT = BACK;
+    private static final String H = "1";
+    private static final String V = "2";
+    private static final String FRONT = "3";
+    private static final String RIGHT = FRONT;
+    private static final String BACK = "4";
+    private static final String LEFT = BACK;
 
-    public static final String H_RIGHT = H + RIGHT;
-    public static final String H_LEFT = H + LEFT;
-    public static final String V_FRONT = V + FRONT;
-    public static final String V_BACK = V + BACK;
+    private static final String H_RIGHT = H + RIGHT;
+    private static final String H_LEFT = H + LEFT;
+    private static final String V_FRONT = V + FRONT;
+    private static final String V_BACK = V + BACK;
 
     public Rook(ChessBoard board, ChessColor color, Coordinate coordinate) {
         super(board, color, coordinate, 'r');
