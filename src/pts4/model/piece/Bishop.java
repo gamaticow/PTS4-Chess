@@ -57,7 +57,7 @@ public class Bishop extends Piece {
         int bR = 7;
 
         for (Coordinate coordinate : move) {
-            Piece pieceOn = getBoard().getCoordinate(coordinate);
+            Piece pieceOn = getBoard().getPiece(coordinate);
             if (pieceOn == null)
                 continue;
             if (coordinate.tag().contains(FRONT)) {

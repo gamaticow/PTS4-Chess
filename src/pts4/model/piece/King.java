@@ -49,7 +49,7 @@ public class King extends Piece {
         Iterator<Coordinate> iterator = move.iterator();
         while (iterator.hasNext()) {
             Coordinate coordinate = iterator.next();
-            Piece pieceOn = getBoard().getCoordinate(coordinate);
+            Piece pieceOn = getBoard().getPiece(coordinate);
             if(pieceOn != null && pieceOn.getColor() == getColor())
                 iterator.remove();
         }
