@@ -14,16 +14,6 @@ import java.util.stream.Collectors;
 
 public class Bishop extends Piece {
 
-    private int y, x;
-    public static final String LEFT = "1";
-    public static final String RIGHT = "2";
-    public static final String FRONT = "3";
-    public static final String BACK = "4";
-
-    public static final String BACK_LEFT = LEFT + BACK;
-    public static final String FRONT_RIGHT = RIGHT + FRONT;
-    public static final String BACK_RIGHT = RIGHT + BACK;
-    public static final String FRONT_LEFT = LEFT + FRONT;
 
     public Bishop(ChessBoard board, ChessColor color, Coordinate coordinate) {
         super(board, color, coordinate, 'b');
@@ -33,8 +23,8 @@ public class Bishop extends Piece {
     public List<Coordinate> allMoveList() {
         ArrayList<Coordinate> allPossibility = new ArrayList<>();
         for (int i = -7; i < 8; i++) {
-            allPossibility.add(new Coordinate(getCoordinate().getX() + i, getCoordinate().getY() + i).tag(getCoordinate().getY() < i ? BACK_LEFT : FRONT_RIGHT));
-            allPossibility.add(new Coordinate(getCoordinate().getX() + i, getCoordinate().getY() - i).tag(getCoordinate().getX() < i ? BACK_RIGHT : FRONT_LEFT));
+            allPossibility.add(new Coordinate(getCoordinate().getX() + i, getCoordinate().getY() + i));
+            allPossibility.add(new Coordinate(getCoordinate().getX() + i, getCoordinate().getY() - i));
 
         }
 
@@ -47,74 +37,71 @@ public class Bishop extends Piece {
         return allPossibility.stream().distinct().collect(Collectors.toList());
     }
 
+
     @Override
     public List<Coordinate> moveList() {
         List<Coordinate> move = allMoveList();
-        int fR = 7;
-        int fL = 7;
-        int bL = 0;
-        int bR = 7;
+        int vF = 7;
+        int vB = 7;
+        int hL = 0;
+        int hR = 7;
 
         for (Coordinate coordinate : move) {
             Piece pieceOn = getBoard().getCoordinate(coordinate);
             if (pieceOn == null)
                 continue;
-            if (coordinate.tag().contains(FRONT)) {
-                if (coordinate.tag().contains(RIGHT)) {
-                    if (coordinate.getX() <= fR) {
-                        if (pieceOn.getColor() == getColor())
-                            fR = coordinate.getX() - 1;
-                        else
-                            fR = coordinate.getX();
-                    }
-                } else if (coordinate.tag().contains(LEFT)) {
-                    if (coordinate.getX() <= fL) {
-                        if (pieceOn.getColor() == getColor())
-                            fL = coordinate.getX() - 1;
-                        else
-                            fL = coordinate.getX();
-                    }
+            if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {//Front right
+                if (coordinate.getX() <= vF) {
+                    if (pieceOn.getColor() == getColor())
+                        vF = coordinate.getX() - 1;
+                    else
+                        vF = coordinate.getX();
                 }
-            } else if (coordinate.tag().contains(BACK)) {
-                if (coordinate.tag().contains(RIGHT)) {
-                    if (coordinate.getY() <= bR) {
-                        if (pieceOn.getColor() == getColor())
-                            bR = coordinate.getY() - 1;
-                        else
-                            bR = coordinate.getY();
-                    }
-                } else if (coordinate.tag().contains(LEFT)) {
-                    if (coordinate.getY() >= bL) {
-                        if (pieceOn.getColor() == getColor())
-                            bL = coordinate.getY() + 1;
-                        else
-                            bL = coordinate.getY();
-                    }
+            }
+            if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {//Front left
+                if (coordinate.getX() <= vB) {
+                    if (pieceOn.getColor() == getColor())
+                        vB = coordinate.getX() - 1;
+                    else
+                        vB = coordinate.getX();
+                }
+            }
+            if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {//Back right
+                if (coordinate.getY() <= hR) {
+                    if (pieceOn.getColor() == getColor())
+                        hR = coordinate.getY() - 1;
+                    else
+                        hR = coordinate.getY();
+                }
+            }
+            if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {//Back left
+                if (coordinate.getY() >= hL) {
+                    if (pieceOn.getColor() == getColor())
+                        hL = coordinate.getY() + 1;
+                    else
+                        hL = coordinate.getY();
                 }
             }
         }
-
-        System.out.println(fR);
-
         Iterator<Coordinate> iterator = move.iterator();
         while (iterator.hasNext()) {
             Coordinate coordinate = iterator.next();
-            if (coordinate.tag().equals(FRONT_RIGHT)) {
-                if (coordinate.getX() > fR)
+            if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {
+                if (coordinate.getX() > vF)
                     iterator.remove();
-            } else if (coordinate.tag().equals(FRONT_LEFT)) {
-                if (coordinate.getX() > fL)
+            } else if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {
+                if (coordinate.getX() > vB)
                     iterator.remove();
-            } else if (coordinate.tag().equals(BACK_RIGHT)) {
-                if (coordinate.getY() > bR)
+            } else if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {
+                if (coordinate.getY() > hR)
                     iterator.remove();
-            } else if (coordinate.tag().equals(BACK_LEFT)) {
-                if (coordinate.getY() < bL)
+            } else if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {
+                if (coordinate.getY() < hL)
                     iterator.remove();
             }
+
+
         }
         return move;
     }
-
-
 }
