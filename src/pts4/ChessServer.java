@@ -4,6 +4,7 @@ import pts4.model.piece.Piece;
 import pts4.model.socket.ServerThread;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,6 +20,9 @@ public class ChessServer {
         Piece.graphics = false;
 
         ServerSocket server = new ServerSocket(PORT);
+
+        System.out.println("Serveur d'Echecs démaré");
+        System.out.println("Ip local du serveur : " + InetAddress.getLocalHost().getHostAddress());
 
         ServerThread last = null;
 
