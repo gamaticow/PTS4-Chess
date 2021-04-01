@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ChessServer">
+    <output-path>$PROJECT_DIR$/out/artifacts/ChessServer</output-path>
+    <root id="archive" name="ChessServer.jar">
+      <element id="module-output" name="Chess" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/server-META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,7 +1,9 @@
 package pts4.model.piece;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
+import pts4.ChessApplication;
 import pts4.controller.GameController;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
@@ -33,9 +35,11 @@ public abstract class Piece {
         this.hasMove = false;
 
         String name = String.valueOf(color.getPrefix()) + piece + ".png";
-        File image = new File(Piece.class.getClassLoader().getResource(name).getFile());
-        if(graphics)
-            this.image = new ImageView(image.toURI().toString());
+        //File image = new File(/*Piece.class.getClassLoader().getResource(name).getFile()*/name);
+        if(graphics) {
+            Image image = new Image(ChessApplication.class.getClassLoader().getResourceAsStream(name));
+            this.image = new ImageView(image);
+        }
     }
 
     /**
