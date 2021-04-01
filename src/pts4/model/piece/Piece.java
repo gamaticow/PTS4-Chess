@@ -16,12 +16,13 @@ import java.util.List;
 
 public abstract class Piece {
 
+    public static boolean graphics = true;
     public static String lastMove;
 
     @Getter private final ChessBoard board;
     @Getter private final ChessColor color;
     @Getter private Coordinate coordinate;
-    @Getter private final ImageView image;
+    @Getter private ImageView image;
     @Getter private boolean hasMove;
 
 
@@ -33,7 +34,8 @@ public abstract class Piece {
 
         String name = String.valueOf(color.getPrefix()) + piece + ".png";
         File image = new File(Piece.class.getClassLoader().getResource(name).getFile());
-        this.image = new ImageView(image.toURI().toString());
+        if(graphics)
+            this.image = new ImageView(image.toURI().toString());
     }
 
     /**

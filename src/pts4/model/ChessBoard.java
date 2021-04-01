@@ -22,6 +22,7 @@ public class ChessBoard {
     @Getter private final List<Piece> pieces;
     @Getter private Player p1, p2;
 
+
     private GameController toRevalidate;
 
     private ChessBoard() {

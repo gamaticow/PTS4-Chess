@@ -10,7 +10,7 @@ import pts4.controller.ModeController;
 
 public class ChessApplication extends Application {
 
-    public static final int PORT = 1010;
+    public static final int PORT = 20202;
 
     @Override
     public void start(Stage primaryStage) throws Exception {

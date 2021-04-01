@@ -8,6 +8,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import pts4.ChessApplication;
+import pts4.ChessServer;
 import pts4.model.ChessBoard;
 import pts4.model.piece.ChessColor;
 import pts4.model.player.LocalPlayer;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Random;
 
 /**
  * Created by Corentin on 29/03/2021 at 20:16
@@ -30,6 +33,7 @@ public class ModeController {
     public AnchorPane stage;
     public TextField lanIp;
     public TextField serverIp;
+    public TextField name;
 
     public void local(MouseEvent mouseEvent) {
         Player p1 = new LocalPlayer("Joueur 1", ChessColor.WHITE);
@@ -48,13 +52,28 @@ public class ModeController {
     }
 
     public void join(MouseEvent mouseEvent) {
-        SocketClient client = new SocketClient(lanIp.getText());
+        SocketClient client = new SocketClient(lanIp.getText(), ChessApplication.PORT);
 
         GameController.startView((Stage) stage.getScene().getWindow(), ChessBoard.from(client.getBoard()), client);
     }
 
+    @SneakyThrows
     public void connect(MouseEvent mouseEvent) {
+        SocketClient client = new SocketClient(serverIp.getText(), ChessServer.PORT);
 
+        String name = this.name.getText();
+        if(name == null || name.isEmpty())
+            name = "Joueur";
+
+        client.sendName(name);
+
+        String board = client.getBoard();
+        if(board.equals("wait")) {
+            WaitRoom.client = client;
+            WaitRoom.startView((Stage) stage.getScene().getWindow(), WaitRoom.Mode.SERVER);
+        } else {
+            GameController.startView((Stage) stage.getScene().getWindow(), ChessBoard.from(board), client);
+        }
     }
 
     public static ModeController startView(Stage primaryStage) throws IOException {

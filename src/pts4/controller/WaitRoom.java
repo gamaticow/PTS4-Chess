@@ -8,7 +8,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import pts4.model.ChessBoard;
 import pts4.model.socket.LanServer;
+import pts4.model.socket.SocketClient;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -23,23 +25,45 @@ public class WaitRoom {
     public Text text;
 
     public static LanServer server;
+    public static SocketClient client;
+    private Mode mode;
 
-    public WaitRoom() {
-        if(server.isReady())
-            unlock();
-        else
-            server.setCallback(this::unlock);
+    public void prepareUnlock() {
+        if(mode == Mode.LAN) {
+            if (server.isReady())
+                unlock();
+            else
+                server.setCallback(this::unlock);
+        }else if(mode == Mode.SERVER) {
+            new Thread(() -> {
+                String board = client.getBoard();
+                while (board.equals("wait")) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    board = client.getBoard();
+                }
+                unlock();
+            }).start();
+        }
     }
 
     @SneakyThrows
-    public void loadText(Mode mode) {
+    public void loadText() {
         if(mode == Mode.LAN) {
             text.setText("Adresse ip locale : " + InetAddress.getLocalHost().getHostAddress());
+        } else if(mode == Mode.SERVER) {
+            text.setText("En attente d'un second joueur");
         }
     }
 
     public void unlock() {
-        Platform.runLater(() -> GameController.startView((Stage) stage.getScene().getWindow(), server.getBoard()));
+        if(mode == Mode.LAN)
+            Platform.runLater(() -> GameController.startView((Stage) stage.getScene().getWindow(), server.getBoard()));
+        else if (mode == Mode.SERVER)
+            Platform.runLater(() -> GameController.startView((Stage) stage.getScene().getWindow(), ChessBoard.from(client.getBoard()), client));
     }
 
     public static WaitRoom startView(Stage primaryStage, Mode mode) throws IOException {
@@ -48,7 +72,9 @@ public class WaitRoom {
         primaryStage.setScene(new Scene(root));
 
         WaitRoom controller = loader.getController();
-        controller.loadText(mode);
+        controller.mode = mode;
+        controller.loadText();
+        controller.prepareUnlock();
         return loader.getController();
     }
 

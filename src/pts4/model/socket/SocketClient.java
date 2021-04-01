@@ -18,8 +18,8 @@ public class SocketClient {
     private final DataOutputStream out;
 
     @SneakyThrows
-    public SocketClient(String ip) {
-        socket = new Socket(ip, ChessApplication.PORT);
+    public SocketClient(String ip, int port) {
+        socket = new Socket(ip, port);
 
         if(socket.isConnected()) {
             in = new DataInputStream(socket.getInputStream());
@@ -28,6 +28,12 @@ public class SocketClient {
             in = null;
             out = null;
         }
+    }
+
+    @SneakyThrows
+    public void sendName(String name) {
+        out.writeUTF(name);
+        out.flush();
     }
 
     public String getBoard() {
