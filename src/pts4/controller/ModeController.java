@@ -19,10 +19,6 @@ import pts4.model.socket.LanServer;
 import pts4.model.socket.SocketClient;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.Random;
 
 /**
  * Created by Corentin on 29/03/2021 at 20:16

@@ -2,9 +2,9 @@ package pts4.model.socket;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import pts4.ChessApplication;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
 
 /**

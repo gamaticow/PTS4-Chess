@@ -1,6 +1,5 @@
 package pts4.model.piece;
 
-import pts4.controller.GameController;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 

@@ -4,13 +4,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.Getter;
 import pts4.ChessApplication;
-import pts4.controller.GameController;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
-import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Corentin on 20/02/2021 at 12:41
@@ -37,7 +36,7 @@ public abstract class Piece {
         String name = String.valueOf(color.getPrefix()) + piece + ".png";
         //File image = new File(/*Piece.class.getClassLoader().getResource(name).getFile()*/name);
         if(graphics) {
-            Image image = new Image(ChessApplication.class.getClassLoader().getResourceAsStream(name));
+            Image image = new Image(Objects.requireNonNull(ChessApplication.class.getClassLoader().getResourceAsStream(name)));
             this.image = new ImageView(image);
         }
     }

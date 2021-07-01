@@ -5,8 +5,6 @@ import lombok.Setter;
 import pts4.model.ChessBoard;
 import pts4.model.piece.ChessColor;
 
-import java.io.Serializable;
-
 /**
  * Created by Corentin on 27/03/2021 at 13:53
  */

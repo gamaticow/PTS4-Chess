@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 import lombok.Getter;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
-import pts4.model.piece.*;
+import pts4.model.piece.CheckDetector;
+import pts4.model.piece.Piece;
 import pts4.model.player.LocalPlayer;
 import pts4.model.player.Player;
 import pts4.model.socket.SocketClient;
@@ -50,15 +51,11 @@ public class GameController extends Pane {
         board = new Board(this);
 
         for(Piece piece : chessBoard.getPieces()) {
-            piece.getImage().setOnMouseClicked(event -> {
-                click(piece.getCoordinate());
-            });
+            piece.getImage().setOnMouseClicked(event -> click(piece.getCoordinate()));
         }
 
         for (Square square : board.getSquareList()) {
-            square.setOnMouseClicked(event -> {
-                click(square.getCoordinate());
-            });
+            square.setOnMouseClicked(event -> click(square.getCoordinate()));
         }
 
         this.infoP1 = new Info(chessBoard.getP1());
@@ -95,7 +92,7 @@ public class GameController extends Pane {
                     selected = null;
                     chessBoard.swapPlaying();
 
-                    if(!new CheckDetector(chessBoard, getPlaying().getColor()).hasMove()) {
+                    if(new CheckDetector(chessBoard, getPlaying().getColor()).hasNoMove()) {
                         if(chessBoard.getP1().isTurn())
                             winner = chessBoard.getP2();
                         else
@@ -157,7 +154,7 @@ public class GameController extends Pane {
                     chessBoard.getPiece(c1).moveTo(c2);
                     chessBoard.swapPlaying();
 
-                    if(!new CheckDetector(chessBoard, getPlaying().getColor()).hasMove()) {
+                    if(new CheckDetector(chessBoard, getPlaying().getColor()).hasNoMove()) {
                         if(chessBoard.getP1().isTurn())
                             winner = chessBoard.getP2();
                         else

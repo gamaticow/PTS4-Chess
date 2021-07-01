@@ -1,6 +1,5 @@
 package pts4.model.piece;
 
-import pts4.controller.GameController;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
@@ -138,32 +137,38 @@ public class Queen extends Piece {
         Iterator<Coordinate> iterator = move.iterator();
         while (iterator.hasNext()) {
             Coordinate coordinate = iterator.next();
-            if(coordinate.tag().equals(V_FRONT)) {
-                if(coordinate.getX() > F)
-                    iterator.remove();
-            } else if(coordinate.tag().equals(V_BACK)) {
-                if(coordinate.getX() < B)
-                    iterator.remove();
-            } else if(coordinate.tag().equals(H_RIGHT)) {
-                if(coordinate.getY() > R)
-                    iterator.remove();
-            } else if(coordinate.tag().equals(H_LEFT)) {
-                if(coordinate.getY() < L)
-                    iterator.remove();
-            }else if (coordinate.tag().equals(DIAG)){
-                if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {
-                    if (coordinate.getX() > vF)
+            switch (coordinate.tag()) {
+                case V_FRONT:
+                    if (coordinate.getX() > F)
                         iterator.remove();
-                } else if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {
-                    if (coordinate.getX() > vB)
+                    break;
+                case V_BACK:
+                    if (coordinate.getX() < B)
                         iterator.remove();
-                } else if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {
-                    if (coordinate.getY() > hR)
+                    break;
+                case H_RIGHT:
+                    if (coordinate.getY() > R)
                         iterator.remove();
-                } else if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {
-                    if (coordinate.getY() < hL)
+                    break;
+                case H_LEFT:
+                    if (coordinate.getY() < L)
                         iterator.remove();
-                }
+                    break;
+                case DIAG:
+                    if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {
+                        if (coordinate.getX() > vF)
+                            iterator.remove();
+                    } else if (getCoordinate().getX() < coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {
+                        if (coordinate.getX() > vB)
+                            iterator.remove();
+                    } else if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() < coordinate.getY()) {
+                        if (coordinate.getY() > hR)
+                            iterator.remove();
+                    } else if (getCoordinate().getX() > coordinate.getX() && getCoordinate().getY() > coordinate.getY()) {
+                        if (coordinate.getY() < hL)
+                            iterator.remove();
+                    }
+                    break;
             }
         }
         return move;

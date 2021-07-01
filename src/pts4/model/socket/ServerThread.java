@@ -1,16 +1,12 @@
 package pts4.model.socket;
 
-import javafx.application.Platform;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import pts4.ChessApplication;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 import pts4.model.piece.ChessColor;
-import pts4.model.piece.Piece;
 import pts4.model.player.Player;
 import pts4.model.player.RemotePlayer;
-import pts4.view.Board;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,6 +27,8 @@ public class ServerThread extends Thread {
     private ChessBoard board;
     private ChessColor color;
     private String lastMove = "";
+
+    @Setter private boolean running = true;
 
     @SneakyThrows
     public ServerThread(Socket client) {
@@ -62,7 +60,7 @@ public class ServerThread extends Thread {
     @SneakyThrows
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             byte type = in.readByte();
 
             if(type == 1) {

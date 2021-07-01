@@ -1,6 +1,5 @@
 package pts4.model.piece;
 
-import pts4.controller.GameController;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
@@ -94,18 +93,23 @@ public class Rook extends Piece {
         Iterator<Coordinate> iterator = move.iterator();
         while (iterator.hasNext()) {
             Coordinate coordinate = iterator.next();
-            if(coordinate.tag().equals(V_FRONT)) {
-                if(coordinate.getX() > vF)
-                    iterator.remove();
-            } else if(coordinate.tag().equals(V_BACK)) {
-                if(coordinate.getX() < vB)
-                    iterator.remove();
-            } else if(coordinate.tag().equals(H_RIGHT)) {
-                if(coordinate.getY() > hR)
-                    iterator.remove();
-            } else if(coordinate.tag().equals(H_LEFT)) {
-                if(coordinate.getY() < hL)
-                    iterator.remove();
+            switch (coordinate.tag()) {
+                case V_FRONT:
+                    if (coordinate.getX() > vF)
+                        iterator.remove();
+                    break;
+                case V_BACK:
+                    if (coordinate.getX() < vB)
+                        iterator.remove();
+                    break;
+                case H_RIGHT:
+                    if (coordinate.getY() > hR)
+                        iterator.remove();
+                    break;
+                case H_LEFT:
+                    if (coordinate.getY() < hL)
+                        iterator.remove();
+                    break;
             }
         }
 

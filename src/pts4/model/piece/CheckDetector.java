@@ -19,7 +19,6 @@ public class CheckDetector {
     public CheckDetector(ChessBoard board, ChessColor color) {
         this.board = board;
         this.color = color;
-        //this.oppColor = color == ChessColor.WHITE ? ChessColor.BLACK : ChessColor.WHITE;
     }
 
     public boolean isCheck() {
@@ -49,14 +48,14 @@ public class CheckDetector {
         return moves;
     }
 
-    public boolean hasMove() {
+    public boolean hasNoMove() {
         for(Piece piece : board.getPieces()) {
             if(piece.getColor() == color) {
                 if(getMoveFor(piece).size() > 0)
-                    return true;
+                    return false;
             }
         }
-        return false;
+        return true;
     }
 
 }

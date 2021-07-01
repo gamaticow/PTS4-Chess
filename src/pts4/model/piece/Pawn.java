@@ -1,6 +1,5 @@
 package pts4.model.piece;
 
-import pts4.controller.GameController;
 import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 
@@ -57,17 +56,21 @@ public class Pawn extends Piece {
             while (iterator.hasNext()) {
                 Coordinate coordinate = iterator.next();
                 Piece pieceOn = getBoard().getPiece(coordinate);
-                if (coordinate.tag().equals(EAT_MOVE)) {
-                    if (pieceOn == null || pieceOn.getColor() == getColor())
-                        iterator.remove();
-                } else if (coordinate.tag().equals(FRONT_MOVE)) {
-                    if (pieceOn != null) {
-                        front = false;
-                        iterator.remove();
-                    }
-                } else if(coordinate.tag().equals(FRONT_MOVE_DOUBLE)) {
-                    if(!front || pieceOn != null)
-                        iterator.remove();
+                switch (coordinate.tag()) {
+                    case EAT_MOVE:
+                        if (pieceOn == null || pieceOn.getColor() == getColor())
+                            iterator.remove();
+                        break;
+                    case FRONT_MOVE:
+                        if (pieceOn != null) {
+                            front = false;
+                            iterator.remove();
+                        }
+                        break;
+                    case FRONT_MOVE_DOUBLE:
+                        if (!front || pieceOn != null)
+                            iterator.remove();
+                        break;
                 }
             }
         }

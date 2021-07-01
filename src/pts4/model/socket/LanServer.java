@@ -9,7 +9,8 @@ import pts4.model.ChessBoard;
 import pts4.model.Coordinate;
 import pts4.model.piece.Piece;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -23,6 +24,7 @@ public class LanServer implements Runnable {
     private final ServerSocket server;
     @Getter private boolean ready;
     @Setter private Runnable callback;
+    @Setter private boolean running = true;
 
     @SneakyThrows
     public LanServer(ChessBoard chessBoard) {
@@ -46,7 +48,7 @@ public class LanServer implements Runnable {
 
         System.out.println("Connected");
 
-        while (true) {
+        while (running) {
             byte type = in.readByte();
 
             if(type == 1) {
